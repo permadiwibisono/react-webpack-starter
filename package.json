@@ -4,7 +4,8 @@
   "description": "Webpack config for reactjs environment without create-react-app",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot --inline"
+    "start": "webpack-dev-server --config ./webpack/webpack.dev.config.js --hot --inline",
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
+    "interpolate-html-plugin": "^2.0.0",
     "json-loader": "^0.5.7",
     "postcss-loader": "^2.0.9",
     "style-loader": "^0.19.0",
