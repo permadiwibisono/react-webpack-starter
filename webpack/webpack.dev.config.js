@@ -1,8 +1,9 @@
 const path=require('path');
 var webpack=require('webpack');
+var merge=require('webpack-merge');
 var HtmlWebpackPlugin=require('html-webpack-plugin');
 var InterpolateHtmlPlugin=require('interpolate-html-plugin');
-
+var base = require('./webpack.base.config.js');
 const PORT = 9000;
 const PUBLIC_URL=`http://localhost:${PORT}`;
 
@@ -13,15 +14,13 @@ var definePlugin = new webpack.DefinePlugin({
 });
 
 const config={
-    entry:path.resolve('src/index.js'),
     output:{
         path:path.resolve('public'),
         publicPath:'/',
-        filename:'bundles.js'
+        filename:'bundles.[hash].js'
     },
     module:{
         rules:[
-            {test:/\.json$/,loader:"json-loader"},
             {test:/\.css$/,use:[
                 'style-loader',
                 'css-loader',
@@ -34,37 +33,26 @@ const config={
                       ]
                     }
                 }
-            ]},
-            {test:/\.(png|svg|jpg|gif)$/,loader:"file-loader"},
-            {test:/\.jsx?$/, exclude:/node_modules/, loader:"babel-loader"}
+            ]}
         ]
-    },
-    resolve:{
-        extensions:['.js','.jsx']
     },
     plugins:[
         new InterpolateHtmlPlugin({
             'PUBLIC_URL':PUBLIC_URL
         }),
+
         new HtmlWebpackPlugin({
             template:path.resolve('public/index.html'),
             inject:true
         }),
+
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "common",
-            filename: 'commons.js',
-            minChunks: function (module) {
-                // this assumes your vendor imports exist in the node_modules directory
-                return module.context && module.context.includes("node_modules");
-            }
-        }),
+        
         definePlugin
     ],
-    devtool:'source-map',
     devServer:{
         contentBase:'./public',
         port:PORT
     }
 }
-module.exports=config;
+module.exports=merge(base,config);
