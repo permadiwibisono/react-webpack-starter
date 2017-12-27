@@ -1,24 +1,18 @@
-const path=require('path');
-var webpack=require('webpack');
-var merge=require('webpack-merge');
-var HtmlWebpackPlugin=require('html-webpack-plugin');
-var InterpolateHtmlPlugin=require('interpolate-html-plugin');
-var base = require('./webpack.base.config.js');
-const PORT = 9000;
-const PUBLIC_URL=`http://localhost:${PORT}`;
+const path=require('./path.js');
+const webpack=require('webpack');
+const merge=require('webpack-merge');
+const HtmlWebpackPlugin=require('html-webpack-plugin');
+const InterpolateHtmlPlugin=require('interpolate-html-plugin');
+const base = require('./webpack.base.config.js');
 
 // definePlugin takes raw strings and inserts them, so you can put strings of JS if you want.
-var definePlugin = new webpack.DefinePlugin({
+const definePlugin = new webpack.DefinePlugin({
     __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true')),
     __PRERELEASE__: JSON.stringify(JSON.parse(process.env.BUILD_PRERELEASE || 'false'))
 });
 
 const config={
-    output:{
-        path:path.resolve('public'),
-        publicPath:'/',
-        filename:'bundles.[hash].js'
-    },
+    output:path.development.output,
     module:{
         rules:[
             {test:/\.css$/,use:[
@@ -38,11 +32,11 @@ const config={
     },
     plugins:[
         new InterpolateHtmlPlugin({
-            'PUBLIC_URL':PUBLIC_URL
+            'PUBLIC_URL':`http://localhost:${path.development.port}`
         }),
 
         new HtmlWebpackPlugin({
-            template:path.resolve('public/index.html'),
+            template:path.development.templateHtml,
             inject:true
         }),
 
@@ -52,7 +46,7 @@ const config={
     ],
     devServer:{
         contentBase:'./public',
-        port:PORT
+        port:path.development.port
     }
 }
 module.exports=merge(base,config);

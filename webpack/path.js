@@ -14,6 +14,15 @@ module.exports={
             filename:'bundles.[chunkhash:8].js'
         }
     },
+    development:{
+        output:{
+            path:path.resolve('public'),
+            publicPath:'/',
+            filename:'bundles.[chunkhash:8].js'
+        },
+        templateHtml:path.resolve('public/index.html'),
+        port:'9000',
+    },
     vendor:{
         filename:'vendors.[hash:8].js'
     }
