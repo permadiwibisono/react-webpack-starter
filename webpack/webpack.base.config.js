@@ -1,11 +1,12 @@
-var path = require('path');
+var path = require('./path.js');
 var webpack=require('webpack');
 const config = {
-    entry:path.resolve('src/index.js'),
+    entry:path.entry,
     module:{
         rules:[
             {test:/\.json$/,loader:"json-loader"},
-            {test:/\.(png|svg|jpg|gif)$/,loader:"file-loader"},
+            {test:/\.(eot?.+|ttf?.+|otf?.+|woff?.+|woff2?.+)$/,loader:"file-loader"},
+            {test:/\.(png|svg|jpg|gif)$/,loader:"url-loader?limit=10000"},
             {test:/\.jsx?$/, exclude:/node_modules/, loader:"babel-loader"}
         ]
     },
@@ -14,8 +15,8 @@ const config = {
     },
     plugins:[
         new webpack.optimize.CommonsChunkPlugin({
-            name: "common",
-            filename: 'vendors.[hash].js',
+            name: "vendor",
+            filename: path.vendor.filename,
             minChunks: function (module) {
                 // this assumes your vendor imports exist in the node_modules directory
                 return module.context && module.context.includes("node_modules");
