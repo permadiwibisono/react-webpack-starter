@@ -1,35 +1,31 @@
-var path=require('./path.js');
-var webpack=require('webpack');
-var merge=require('webpack-merge');
-var base = require('./webpack.base.config.js');
+const path=require('./path.js');
+const webpack=require('webpack');
+const merge=require('webpack-merge');
+const base = require('./webpack.base.config.js');
 
-var HtmlWebpackPlugin=require('html-webpack-plugin');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var InterpolateHtmlPlugin=require('interpolate-html-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin=require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const InterpolateHtmlPlugin=require('interpolate-html-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-var PreloadWebpackPlugin = require('preload-webpack-plugin');
-var ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-var StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
-var CompressionPlugin = require('compression-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var extractCSS = new ExtractTextPlugin('styles.[chunkhash:8].css');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const extractCSS = new ExtractTextPlugin('styles.[chunkhash:8].css');
 
 // definePlugin takes raw strings and inserts them, so you can put strings of JS if you want.
-var definePlugin = new webpack.DefinePlugin({
+const definePlugin = new webpack.DefinePlugin({
     __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'false')),
     __PRERELEASE__: JSON.stringify(JSON.parse(process.env.BUILD_PRERELEASE || 'false')),
     'process.env.NODE_ENV': JSON.stringify('production')
 });
 
 const config={
-    output:{
-        path : path.production.assetsPath,
-        publicPath : path.production.publicPath,
-        filename : path.production.scripts.filename
-    },
+    output:path.production.output,
     module: {
         rules: [
             {
@@ -66,7 +62,7 @@ const config={
         extractCSS,
 
         new CopyWebpackPlugin([{
-            context: path.production.staticSourcePath,
+            context: path.production.staticPath,
             from : '**/*',
             to : path.production.buildPath
         }],{ ignore:['*.html'] }),

@@ -3,16 +3,16 @@ const path = require('path');
 module.exports={
     entry:path.resolve('src/index.js'),
     production:{
+        output:{
+            path:path.resolve('build/assets'),
+            publicPath:'/assets/',
+            filename:'bundles.[chunkhash:8].js'
+        },
         rootPath:path.resolve('/'),
         sourcePath:path.resolve('src'),
-        staticSourcePath:path.resolve('public'),
+        staticPath:path.resolve('public'),
         buildPath:path.resolve('build'),
-        assetsPath:path.resolve('build/assets'),
-        publicPath:'/assets/',
         templateHtml:path.resolve('public/index.html'),
-        scripts:{
-            filename:'bundles.[chunkhash:8].js'
-        }
     },
     development:{
         output:{
